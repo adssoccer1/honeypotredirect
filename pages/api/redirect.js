@@ -30,7 +30,7 @@ const redirectToShopify = (req, res) => {
 };
 
 export default redirectToShopify;
-*/
+
 
 
 const redirectToShopify = (req, res) => {
@@ -55,6 +55,41 @@ const redirectToShopify = (req, res) => {
   console.log("cook set");
   cookies.set(cookieName, cookieValue, cookieOptions);
   res.redirect(`https://honeypotshopapp.myshopify.com/`);
+};
+
+export default redirectToShopify;
+
+*/
+
+
+const redirectToShopify = (req, res) => {
+  // Generate a UUID
+  const id = uuidv4();
+
+  // Check if the request is secure or if the app is running on Vercel
+  const isSecure = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https';
+  console.log("isSecure is: ", isSecure);
+
+  // Create a new instance of the Cookies class
+  const cookies = new Cookies(req, res);
+
+  // Set the cookie
+  console.log("cook set");
+  cookies.set('cookie_from_honeypot', id, {
+    httpOnly: false,
+    secure: isSecure,
+    sameSite: 'lax',
+    domain: '.myshopify.com',
+    expires: new Date(Date.now() + 86400000), // 1 day
+  });
+
+  // Redirect to the Shopify store
+  console.log("now redirect");
+
+  res.writeHead(307, {
+    Location: 'https://honeypotshopapp.myshopify.com/',
+  });
+  res.end();
 };
 
 export default redirectToShopify;
