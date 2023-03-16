@@ -76,9 +76,9 @@ const redirectToShopify = (req, res) => {
   // Set the cookie
   console.log("cook set");
   cookies.set('cookie_from_honeypot', id, {
-    httpOnly: false,
+    httpOnly: true,
     secure: isSecure,
-    sameSite: 'lax',
+    sameSite: 'none', // Change from 'strict' to 'none'
     domain: '.myshopify.com',
     expires: new Date(Date.now() + 86400000), // 1 day
   });
@@ -93,3 +93,4 @@ const redirectToShopify = (req, res) => {
 };
 
 export default redirectToShopify;
+ 
