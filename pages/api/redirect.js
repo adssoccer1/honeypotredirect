@@ -71,7 +71,7 @@ const redirectToShopify = (req, res) => {
   console.log("isSecure is: ", isSecure);
 
   // Create a new instance of the Cookies class
-  const cookies = new Cookies(req, res);
+  const cookies = new Cookies(req, res, { secure: true /* request is secure */ });
 
   // Set the cookie
   console.log("cook set");
