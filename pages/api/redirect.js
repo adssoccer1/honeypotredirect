@@ -1,7 +1,41 @@
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
 
-/*
+
+
+
+const redirectToShopify = (req, res) => {
+  // Generate a UUID
+  const id = uuidv4();
+
+  // Check if the request is secure or if the app is running on Vercel
+  const isSecure = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https';
+  console.log("isSecure is: ", isSecure);
+
+  // Create a new instance of the Cookies class
+  const cookies = new Cookies(req, res, { secure: true /* request is secure */ });
+
+  // Set the cookie
+  console.log("cook set");
+  cookies.set('cookie_from_honeypot', id, {
+    httpOnly: true,
+    secure: isSecure,
+    sameSite: 'none', // Change from 'strict' to 'none'
+    domain: '.honeypotshopapp.myshopify.com',
+    expires: new Date(Date.now() + 86400000), // 1 day
+  });
+
+  // Redirect to the Shopify store
+  console.log("now redirect");
+
+  res.writeHead(307, {
+    Location: 'https://honeypotshopapp.myshopify.com/',
+  });
+  res.end();
+};
+
+export default redirectToShopify;
+ /*
 const redirectToShopify = (req, res) => {
   // Generate a unique identifier for the visitor
   const visitorId = uuidv4();
@@ -60,37 +94,3 @@ const redirectToShopify = (req, res) => {
 export default redirectToShopify;
 
 */
-
-
-const redirectToShopify = (req, res) => {
-  // Generate a UUID
-  const id = uuidv4();
-
-  // Check if the request is secure or if the app is running on Vercel
-  const isSecure = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https';
-  console.log("isSecure is: ", isSecure);
-
-  // Create a new instance of the Cookies class
-  const cookies = new Cookies(req, res, { secure: true /* request is secure */ });
-
-  // Set the cookie
-  console.log("cook set");
-  cookies.set('cookie_from_honeypot', id, {
-    httpOnly: true,
-    secure: isSecure,
-    sameSite: 'none', // Change from 'strict' to 'none'
-    domain: '.myshopify.com',
-    expires: new Date(Date.now() + 86400000), // 1 day
-  });
-
-  // Redirect to the Shopify store
-  console.log("now redirect");
-
-  res.writeHead(307, {
-    Location: 'https://honeypotshopapp.myshopify.com/',
-  });
-  res.end();
-};
-
-export default redirectToShopify;
- 
